@@ -1,13 +1,22 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
+import { z } from "zod";
 
 export async function POST(req: Request) {
   try {
-    const { email, password } = await req.json();
-    if (!email || !password) {
-      return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
+    const userSchema = z.object({
+      email: z.string().email("Invalid email format").trim().toLowerCase(),
+      password: z.string().min(8, "Password must be at least 8 characters long"),
+    });
+    const body = await req.json();
+    const parsed = userSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return NextResponse.json({ error: parsed.error.errors }, { status: 400 });
     }
+    const { email, password } = parsed.data;
+
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -21,9 +30,11 @@ export async function POST(req: Request) {
         password: hashedPassword,
       },
     });
-    return NextResponse.json({ user: { id: user.id, email: user.email } }, { status: 201 });
+    return NextResponse.json(
+      { message: "User created successfully", user: { id: user.id, email: user.email } },
+      { status: 201 }
+    );
   } catch (error) {
-    console.error("Register error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
