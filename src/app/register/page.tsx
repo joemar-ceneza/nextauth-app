@@ -27,10 +27,10 @@ export default function RegisterPage() {
       return;
     }
 
-    // Auto sign in with next-auth
+    const normalizedEmail = email.toLocaleLowerCase().trim();
     const loginRes = await signIn("credentials", {
       redirect: false,
-      email,
+      email: normalizedEmail,
       password,
       callbackUrl: "/welcome",
     });
