@@ -8,26 +8,24 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
+    setIsLoading(true);
+    const normalizedEmail = email.toLocaleLowerCase().trim();
     const res = await fetch("/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email: normalizedEmail, password }),
     });
-
     const data = await res.json();
-
     if (!res.ok) {
       setError(data.error || "Something went wrong");
       return;
     }
-
-    const normalizedEmail = email.toLocaleLowerCase().trim();
     const loginRes = await signIn("credentials", {
       redirect: false,
       email: normalizedEmail,
@@ -51,6 +49,7 @@ export default function RegisterPage() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email"
         required
+        disabled={isLoading}
         className="w-full border p-2 rounded"
       />
       <input
@@ -59,11 +58,17 @@ export default function RegisterPage() {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
         required
+        disabled={isLoading}
         className="w-full border p-2 rounded"
       />
       {error && <p className="text-red-500">{error}</p>}
-      <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-        Sign Up
+      <button
+        type="submit"
+        disabled={isLoading}
+        className={`bg-blue-600 text-white px-4 py-2 rounded w-full ${
+          isLoading ? "opacity-50 cursor-not-allowed" : ""
+        }`}>
+        {isLoading ? "Registering..." : "Sign Up"}
       </button>
     </form>
   );
