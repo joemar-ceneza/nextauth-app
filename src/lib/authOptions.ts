@@ -12,14 +12,20 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Invalid email or password");
+        }
         const normalizedEmail = credentials.email.toLocaleLowerCase().trim();
         const user = await prisma.user.findUnique({
           where: { email: normalizedEmail },
         });
-        if (!user) return null;
+        if (!user) {
+          throw new Error("Invalid email or password");
+        }
         const isValid = await bcrypt.compare(credentials.password, user.password);
-        if (!isValid) return null;
+        if (!isValid) {
+          throw new Error("Invalid email or password");
+        }
         return { id: user.id, email: user.email };
       },
     }),
