@@ -46,8 +46,11 @@ export default function LoginPage() {
         className="w-full border p-2 rounded"
       />
       {error && <p className="text-red-600">{error}</p>}
-      <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
-        Log In
+      <button
+        type="submit"
+        disabled={isLoading}
+        className={`bg-blue-600 text-white px-4 py-2 rounded ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}>
+        {isLoading ? "Logging in..." : "Log In"}
       </button>
     </form>
   );
