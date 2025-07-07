@@ -15,34 +15,40 @@ export default function RegisterPage() {
     e.preventDefault();
     setError("");
     setIsLoading(true);
-    const normalizedEmail = email.toLocaleLowerCase().trim();
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: normalizedEmail, password }),
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      if (Array.isArray(data.error)) {
-        setError(data.error.map((err: any) => err.message).join(", "));
-      } else if (typeof data.error === "string") {
-        setError(data.error);
-      } else {
-        setError("Something went wrong.");
+    try {
+      const normalizedEmail = email.toLocaleLowerCase().trim();
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: normalizedEmail, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        if (Array.isArray(data.error)) {
+          setError(data.error.map((err: any) => err.message).join(", "));
+        } else if (typeof data.error === "string") {
+          setError(data.error);
+        } else {
+          setError("Something went wrong.");
+        }
+        return;
       }
-      return;
-    }
-    const loginRes = await signIn("credentials", {
-      redirect: false,
-      email: normalizedEmail,
-      password,
-      callbackUrl: "/welcome",
-    });
+      const loginRes = await signIn("credentials", {
+        redirect: false,
+        email: normalizedEmail,
+        password,
+        callbackUrl: "/welcome",
+      });
 
-    if (loginRes?.ok) {
-      router.push("/welcome");
-    } else {
-      setError("Login failed after registration");
+      if (loginRes?.ok) {
+        router.push("/welcome");
+      } else {
+        setError("Login failed after registration");
+      }
+    } catch (error) {
+      setError("Failed to register. Please try again");
+    } finally {
+      setIsLoading(false);
     }
   };
 
