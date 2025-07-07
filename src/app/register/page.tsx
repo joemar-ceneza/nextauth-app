@@ -23,7 +23,13 @@ export default function RegisterPage() {
     });
     const data = await res.json();
     if (!res.ok) {
-      setError(data.error || "Something went wrong");
+      if (Array.isArray(data.error)) {
+        setError(data.error.map((err: any) => err.message).join(""));
+      } else if (typeof data.error === "string") {
+        setError(data.error);
+      } else {
+        setError("Something went wrong.");
+      }
       return;
     }
     const loginRes = await signIn("credentials", {
