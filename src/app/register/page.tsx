@@ -24,7 +24,7 @@ export default function RegisterPage() {
     const data = await res.json();
     if (!res.ok) {
       if (Array.isArray(data.error)) {
-        setError(data.error.map((err: any) => err.message).join(""));
+        setError(data.error.map((err: any) => err.message).join(", "));
       } else if (typeof data.error === "string") {
         setError(data.error);
       } else {
