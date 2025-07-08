@@ -57,7 +57,10 @@ export default function Home() {
 
     if (!result.ok) {
       if (Array.isArray(data.error)) {
-        setError(data.error.map((err: any) => err.message).join(", "));
+        interface ErrorObject {
+          message: string;
+        }
+        setError(data.error.map((err: ErrorObject) => err.message).join(", "));
       } else if (typeof data.error === "string") {
         setError(data.error);
       } else {
