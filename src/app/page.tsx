@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import Link from "next/link";
 
 export default function Home() {
   const [email, setEmail] = useState("");
