@@ -16,7 +16,7 @@ export default function Home() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     setIsLoading(true);
 
     const result = await signIn("credentials", {
@@ -36,7 +36,7 @@ export default function Home() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     setIsLoading(true);
 
     if (password !== confirmPassword) {
@@ -146,11 +146,14 @@ export default function Home() {
         </div>
         <div className="mt-4 text-center">
           <span className="text-sm text-gray-600">
-            {isLogin ? "Don't have an account?" : "Already have an account?"}
+            {isLogin ? "Don't have an account? " : "Already have an account? "}
           </span>
-          <Link href={"#"} onClick={() => setIsLogin(!isLogin)} className="text-sm text-indigo-600 hover:underline">
+          <button
+            type="button"
+            onClick={() => setIsLogin(!isLogin)}
+            className="text-sm text-indigo-600 hover:underline">
             {isLogin ? "Sign up" : "Log in"}
-          </Link>
+          </button>
         </div>
       </div>
     </main>
