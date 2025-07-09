@@ -152,6 +152,9 @@ export default function Home() {
             onClick={() => {
               setIsLogin(!isLogin);
               setError(null);
+              setEmail("");
+              setPassword("");
+              setConfirmPassword("");
             }}
             className="text-sm text-indigo-600 hover:underline">
             {isLogin ? "Sign up" : "Log in"}
