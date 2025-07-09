@@ -150,7 +150,10 @@ export default function Home() {
           </span>
           <button
             type="button"
-            onClick={() => setIsLogin(!isLogin)}
+            onClick={() => {
+              setIsLogin(!isLogin);
+              setError(null);
+            }}
             className="text-sm text-indigo-600 hover:underline">
             {isLogin ? "Sign up" : "Log in"}
           </button>
