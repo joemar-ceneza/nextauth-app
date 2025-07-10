@@ -132,17 +132,17 @@ export default function Home() {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+            className={`w-full py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
               isLoading ? "opacity-50 cursor-not-allowed" : ""
             }`}>
             {isLoading ? (isLogin ? "Logging in..." : "Registering...") : isLogin ? "Log In" : "Sign Up"}
           </button>
         </form>
-        <div className="mt-4 text-center">
+        {/* <div className="mt-4 text-center">
           <a href="#" className="text-sm text-indigo-600 hover:underline">
             Forgot your password?
           </a>
-        </div>
+        </div> */}
         <div className="mt-4 text-center">
           <span className="text-sm text-gray-600">
             {isLogin ? "Don't have an account? " : "Already have an account? "}
@@ -156,7 +156,7 @@ export default function Home() {
               setPassword("");
               setConfirmPassword("");
             }}
-            className="text-sm text-indigo-600 hover:underline">
+            className="text-sm text-indigo-600 hover:underline hover:cursor-pointer">
             {isLogin ? "Sign up" : "Log in"}
           </button>
         </div>
