@@ -15,7 +15,7 @@ export const authOptions: AuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Invalid email or password");
         }
-        const normalizedEmail = credentials.email.toLocaleLowerCase().trim();
+        const normalizedEmail = credentials.email.toLowerCase().trim();
         const user = await prisma.user.findUnique({
           where: { email: normalizedEmail },
         });
@@ -26,7 +26,7 @@ export const authOptions: AuthOptions = {
         if (!isValid) {
           throw new Error("Invalid email or password");
         }
-        return { id: user.id, email: user.email };
+        return { id: user.id, email: user.email, name: user.name };
       },
     }),
   ],
@@ -38,4 +38,24 @@ export const authOptions: AuthOptions = {
     signIn: "/",
   },
   secret: process.env.NEXTAUTH_SECRET,
+
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.name = user.name;
+      } else if (!token.name && token.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: token.email as string },
+        });
+        token.name = dbUser?.name ?? undefined;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.name = token.name;
+      }
+      return session;
+    },
+  },
 };
