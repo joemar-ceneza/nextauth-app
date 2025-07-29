@@ -1,12 +1,10 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function CompleteProfile() {
   const { data: session, update } = useSession();
-  const router = useRouter();
   const [name, setName] = useState("");
 
   const handleSubmit = async () => {
@@ -19,7 +17,8 @@ export default function CompleteProfile() {
 
     if (result.ok) {
       await update();
-      router.push("/welcome");
+      window.location.href = "/welcome";
+      console.log("Updated session: ", await update());
     } else {
       console.error("Failed to update name");
     }
