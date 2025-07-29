@@ -1,12 +1,10 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function CompleteProfile() {
   const { data: session, update } = useSession();
-  const router = useRouter();
   const [name, setName] = useState("");
 
   const handleSubmit = async () => {
