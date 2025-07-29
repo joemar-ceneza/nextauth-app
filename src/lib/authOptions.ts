@@ -40,14 +40,14 @@ export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.name = user.name;
-      } else if (!token.name && token.email) {
+      } else if (trigger === "update") {
         const dbUser = await prisma.user.findUnique({
           where: { email: token.email as string },
         });
-        token.name = dbUser?.name ?? undefined;
+        token.name = dbUser?.name ?? token.name;
       }
       return token;
     },
