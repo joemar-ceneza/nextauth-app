@@ -20,6 +20,7 @@ export default function CompleteProfile() {
     if (result.ok) {
       await update();
       router.push("/welcome");
+      console.log("Updated session:", await update());
     } else {
       console.error("Failed to update name");
     }
