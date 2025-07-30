@@ -18,7 +18,6 @@ export default function CompleteProfile() {
     if (result.ok) {
       await update();
       window.location.href = "/welcome";
-      console.log("Updated session: ", await update());
     } else {
       console.error("Failed to update name");
     }
@@ -38,8 +37,11 @@ export default function CompleteProfile() {
           onChange={(e) => setName(e.target.value)}
         />
         <button
+          disabled={!name.trim()}
           onClick={handleSubmit}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 hover:cursor-pointer">
+          className={`bg-blue-600 text-white px-4 py-2 rounded ${
+            name.trim() ? "hover:bg-blue-700 hover:cursor-pointer" : "opacity-50 cursor-not-allowed"
+          }`}>
           Save
         </button>
       </div>
