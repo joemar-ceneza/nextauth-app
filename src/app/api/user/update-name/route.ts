@@ -8,16 +8,16 @@ export async function POST(req: NextRequest) {
   if (!token?.email) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
+  const normalizedEmail = token.email?.toLocaleLowerCase().trim();
   const { name } = await req.json();
   try {
     await prisma.user.update({
-      where: { email: token.email },
+      where: { email: normalizedEmail },
       data: { name },
     });
     return NextResponse.json({ success: true });
-  } catch (err) {
-    console.error("Failed to update user:", err);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  } catch (error) {
+    console.error("Failed to update user:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
