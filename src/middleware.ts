@@ -9,9 +9,7 @@ export async function middleware(req: NextRequest) {
 
   const pathname = req.nextUrl.pathname;
   const isAuthPage = pathname === "/" || pathname === "/welcome";
-  const isCompleteProfile = pathname === "/complete-profile";
-
-  if (!token.name && isAuthPage && !isCompleteProfile) {
+  if (!token.name && !pathname.startsWith("/complete-profile") && isAuthPage) {
     const url = req.nextUrl.clone();
     url.pathname = "/complete-profile";
     return NextResponse.redirect(url);
