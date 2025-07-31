@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   if (!token?.email) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const normalizedEmail = token.email?.toLocaleLowerCase().trim();
+  const normalizedEmail = token.email?.toLowerCase().trim();
   const { name } = await req.json();
   try {
     await prisma.user.update({
